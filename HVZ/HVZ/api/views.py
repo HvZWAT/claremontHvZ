@@ -11,6 +11,7 @@ from django.views.generic.edit import FormView
 from HVZ.api.forms import MailerForm
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 
 def json_get_all_emails(request):
     """A function that displays all emails.
@@ -37,6 +38,9 @@ def json_get_all_emails(request):
 def success(request):
     return render(request, 'api/success.html', {})
 
+def failure(request):
+    return render(request, 'api/failure.html', {})
+
 class Mailer(FormView):
     form_class = MailerForm
     template_name = "api/mailer.html"
@@ -55,15 +59,20 @@ class Mailer(FormView):
         
         return reverse("mail_success")
 
+    def form_invalid(self, form):
+        return super(Mailer, self).form_invalid(form)
+
     def form_valid(self, form):
 
-        sender = "hvzwattest4@gmail.com"
+        failure_url = '/api/failure/'
+
+        sender = "hvwattest4@gmail.com"
         # sender = "mod@claremonthvz.org"
         if form.is_valid():
             # send email using the self.cleand_data dictionary
             subject = form.cleaned_data['subject']
             body = form.cleaned_data['body']
-            recipient_title = form.cleaned_data['recipient']
+            recipient_title = form.cleaned_data['recipient']            
 
         # based on inputs from the recipients field, retrieve the list of players 
         # to send emails to, options are:
@@ -79,7 +88,10 @@ class Mailer(FormView):
         
         # TODO: Authentication error for sender for mod@claremonthvz.org
         mailBag = EmailMessage(subject, body, sender, [], recipients)
-        mailBag.send(fail_silently=False)
+        try:
+            mailBag.send(fail_silently=False)
+        except:
+            return redirect(failure_url)
 
         
         return super(Mailer, self).form_valid(form)
