@@ -42,7 +42,7 @@ EMAIL_HOST = local_settings.EMAIL_HOST
 
 # Your email username and password. We're not telling you ours ;)
 EMAIL_HOST_USER = "hvzwattest4@gmail.com" #local_settings.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = "claremonthvz" #local_settings.EMAIL_HOST_PASSWORD
+EMAIL_HOST_PASSWORD = "claremonthvz4" #local_settings.EMAIL_HOST_PASSWORD
 
 # Your email service's port number. Ours is 587.
 EMAIL_PORT = local_settings.EMAIL_PORT
