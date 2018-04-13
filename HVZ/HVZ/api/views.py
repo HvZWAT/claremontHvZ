@@ -13,6 +13,8 @@ from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 
+exception = "exception"
+
 def json_get_all_emails(request):
     """A function that displays all emails.
 
@@ -39,7 +41,8 @@ def success(request):
     return render(request, 'api/success.html', {})
 
 def failure(request):
-    return render(request, 'api/failure.html', {})
+    print exception
+    return render(request, 'api/failure.html', {'exception' : exception})
 
 class Mailer(FormView):
     form_class = MailerForm
@@ -65,8 +68,8 @@ class Mailer(FormView):
     def form_valid(self, form):
 
         failure_url = '/api/failure/'
+        sender = "hvzwattest4@gmail.com"
 
-        sender = "hvwattest4@gmail.com"
         # sender = "mod@claremonthvz.org"
         if form.is_valid():
             # send email using the self.cleand_data dictionary
@@ -83,14 +86,16 @@ class Mailer(FormView):
         elif(recipient_title == MailerForm.HUMANS):
             recipients = [p.user.email for p in Player.current_players() if p.team == "H"]
 
-        elif(recipient_title == MailerForm.ZOMBIES):
+        elif(recxipient_title == MailerForm.ZOMBIES):
             recipients = [p.user.email for p in Player.current_players() if p.team == "Z"]        
         
         # TODO: Authentication error for sender for mod@claremonthvz.org
         mailBag = EmailMessage(subject, body, sender, [], recipients)
         try:
             mailBag.send(fail_silently=False)
-        except:
+        except Exception as ex:
+            global exception
+            exception = ex
             return redirect(failure_url)
 
         
