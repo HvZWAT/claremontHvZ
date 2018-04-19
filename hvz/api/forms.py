@@ -36,7 +36,7 @@ class MailerForm(forms.Form):
 	# sender = "mod@claremonthvz.org"
 
 	#Email Field validates that the given value is a valid email address
-	recipient = forms.MultipleChoiceField(
+	recipient = forms.ChoiceField(
 		label=_("To:"),
 		required=True, 
 		choices = KindCHOICES
@@ -48,7 +48,8 @@ class MailerForm(forms.Form):
 	
 	subject = forms.CharField(
 		label=_("Subject:"),
-		required=True
+		required=True,
+		widget=forms.Textarea(attrs={'cols': '98', 'rows': 1})
 		)
 
 	body = forms.CharField(

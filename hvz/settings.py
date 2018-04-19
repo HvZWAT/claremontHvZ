@@ -56,6 +56,8 @@ EMAIL_HOST_PASSWORD = "claremonthvz"
 # Your email service's port number. Ours is 587.
 EMAIL_PORT = local_settings.EMAIL_PORT
 
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
 # Make this unique, and don't share it with anybody. Any string will
 # do, but this tool works well:
 # http://www.miniwebtool.com/django-secret-key-generator/
