@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
+from hvz.api.forms import MailerForm
 
 # Create your tests here.
 
@@ -10,7 +11,7 @@ class MailerTest(TestCase):
 		self.password = 'password'
 		self.my_admin = User.objects.create_superuser('test', 'test@test.edu', self.password)
 
-	def test_page(self):
+	def test_page_access(self):
 		# should be unable to access the mailer page without logging in
 		response = self.client.get('/api/mailer')
 		self.assertEqual(response.status_code, 302)
@@ -25,6 +26,12 @@ class MailerTest(TestCase):
 		
 		self.client.logout()
 
+	def test_form(self)
+		login = self.client.login(username=self.my_admin.username, password=self.password)
+		response = self.client.get('/api/mailer', follow=True)
+
+		form = MailerForm()
+		
 
 
 
