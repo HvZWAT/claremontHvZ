@@ -6,12 +6,18 @@ from django.http import HttpResponse
 from hvz.main.models import Player
 from django.core.mail import send_mail
 from django.core.mail import EmailMessage
+from django.core.mail.backends.smtp import EmailBackend
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from hvz.api.forms import MailerForm
 from django.shortcuts import render
 from hvz.api import views
 from django.urls import reverse
+
+
+
+EMAIL_LIST = ["hvzwattest@gmail.com", "hvzwattest2@gmail.com", "hvzwattest3@gmail.com", "hvzwattest4@gmail.com"]
+EMAIL_PW_LIST = ["claremonthvz", "claremonthvz2", "claremonthvz3", "claremonthvz4"]
 
 def json_get_all_emails(request):
     """A function that displays all emails.
@@ -101,19 +107,30 @@ class Mailer(FormView):
             else:
                 recipients = list(set(kind_recipients).intersection(set(school_recipients)))
 
-
             # Create an EmailMessage objwct with our given parameters
             mailBag = EmailMessage(subject, body, sender, [], recipients)
             # Check if the user uploaded an attachment (POST), and attach 
             # it to all messages if so
+
             if self.request.method == 'POST':
                 if(self.request.FILES):
                     attachment = self.request.FILES['attachment']
                     mailBag.attach(attachment.name, attachment.read(), attachment.content_type)
 
-        # Send the emails out!
-
-        mailBag.send(fail_silently=False)
-
+            recipLen = len(recipients)
+            x = 0
+            while recipLen > 0:
+                if(recipLen > 100):
+                    batch = recipients[(x*100):(x*100)+99]
+                    mailBag.bcc = batch
+                    mailBag.connection = EmailBackend(username = EMAIL_LIST[x], password = EMAIL_PW_LIST[x])
+                else:
+                    batch = recipients[(x*100):(x*100)+recipLen]
+                    mailBag.bcc = batch
+                    mailBag.connection = EmailBackend(username = EMAIL_LIST[x], password = EMAIL_PW_LIST[x])
+                # Send the emails out!
+                mailBag.send(fail_silently=False)
+                x += 1
+                recipLen -= 100
         
         return super(Mailer, self).form_valid(form)
