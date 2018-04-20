@@ -524,12 +524,6 @@ emailList = emailList = [
  'collinvalleroy@hotmail.com']
 
 def json_get_all_emails(request):
-    """A function that displays all emails.
-
-    You should replace this with one you actually want.
-
-    """
-
     # Check out HVZ/main/models.py for helper functions relating to Players.
     # Player.current_players() returns all Players in the current Game.
     
@@ -562,10 +556,6 @@ class Mailer(FormView):
 
     def get_success_url(self):
         # after the mail is sent successfully, it goes to the success page
-        # At this point, it is the same as registration success page
-        # in the future, we will have more details 
-        
-
         return reverse("mail_success")
 
     def form_valid(self, form):
@@ -614,7 +604,7 @@ class Mailer(FormView):
             # Create an EmailMessage objwct with our given parameters
             mailBag = EmailMessage(subject, body, sender, [], recipients)
             # Check if the user uploaded an attachment (POST), and attach 
-            # it to all messages if so
+            # it to all messages in the mailBag
 
             attachment = 0
             if self.request.method == 'POST':
@@ -637,9 +627,6 @@ class Mailer(FormView):
                     mailBag.bcc = batch
                     mailBag.connection = EmailBackend(username = EMAIL_LIST[x], password = EMAIL_PW_LIST[x])
                 
-                # if attachment:
-                #     mailBag.attach(attachment.name, attachment.read(), attachment.content_type)
-
                 # Send the emails out!
                 mailBag.send(fail_silently=False)
                 y += 1
