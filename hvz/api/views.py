@@ -15,15 +15,14 @@ from hvz.api import views
 from django.urls import reverse
 
 
-
+# List of emails and passwords to send from
+# Allows users to bypass gmail's daily sending limit by sending from multiple accounts
 EMAIL_LIST = ["hvzwattest@gmail.com", "hvzwattest2@gmail.com", "hvzwattest3@gmail.com", "hvzwattest4@gmail.com"]
 EMAIL_PW_LIST = ["claremonthvz", "claremonthvz2", "claremonthvz3", "claremonthvz4"]
 
 def json_get_all_emails(request):
-    """A function that displays all emails.
-
-    You should replace this with one you actually want.
-
+    """A function that returns a list of strings representing player emails.
+    Note that these emails are only those of players in the current game.
     """
 
     # Check out HVZ/main/models.py for helper functions relating to Players.
@@ -57,11 +56,8 @@ class Mailer(FormView):
         return super(Mailer, self).dispatch(*args, **kwargs)
 
     def get_success_url(self):
-        # after the mail is sent successfully, it goes to the success page
-        # At this point, it is the same as registration success page
-        # in the future, we will have more details 
-        
-
+        # after an email is sent successfully, 
+        # the user is redirected to the success page
         return reverse("mail_success")
 
     def form_valid(self, form):
@@ -69,17 +65,16 @@ class Mailer(FormView):
         kindOptions = {"Humans": "H", "ZOMBIES":"Z"}
 
         sender = "hvzwattest@gmail.com"
-
         # sender = "mod@claremonthvz.org"
+
         if form.is_valid():
-            # send email using the self.cleand_data dictionary
+            # send email using information from the self.cleaned_data dictionary
             subject = form.cleaned_data['subject']
             body = form.cleaned_data['body']
             recipient_title = form.cleaned_data['recipient']
-
-
             schoolSelection = form.cleaned_data['school']
 
+            # filter players by team
             kind_recipients = []
             kind_label = "[" + recipient_title + "]"
             # Using a dictionary to have more robust way to select players
@@ -89,8 +84,10 @@ class Mailer(FormView):
                 # Default recipients list is all players
                 kind_recipients = [p.user.email for p in Player.current_players()]
            
+            # add team tag to subject line
             subject = kind_label + subject
            
+           # filter players by school, add school tag to subject line
             school_recipients = []
             for schools in schoolSelection:
                 school_label = "[" + schools + "]"
@@ -117,6 +114,8 @@ class Mailer(FormView):
                     attachment = self.request.FILES['attachment']
                     mailBag.attach(attachment.name, attachment.read(), attachment.content_type)
 
+            # Send the email in batches of 100. Each batch is sent from a different email in 
+            # the list of sender accounts above (EMAIL_LIST)
             recipLen = len(recipients)
             x = 0
             while recipLen > 0:
