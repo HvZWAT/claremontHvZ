@@ -49,7 +49,7 @@ class MailerForm(forms.Form):
 	subject = forms.CharField(
 		label=_("Subject:"),
 		required=True,
-		widget=forms.Textarea(attrs={'cols': '98', 'rows': 1})
+		widget=forms.Textarea(attrs={'cols': '97', 'rows': 1})
 		)
 
 	body = forms.CharField(
