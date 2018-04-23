@@ -14,8 +14,6 @@ from django.shortcuts import render
 from hvz.api import views
 from django.urls import reverse
 
-
-
 EMAIL_LIST = ["hvzwattest@gmail.com", "hvzwattest1@gmail.com", "hvzwattest2@gmail.com", "hvzwattest3@gmail.com", "hvzwattest4@gmail.com"]
 EMAIL_PW_LIST = ["claremonthvz", "claremonthvz1", "claremonthvz2", "claremonthvz", "claremonthvz4"]
 
@@ -559,21 +557,19 @@ class Mailer(FormView):
         return reverse("mail_success")
 
     def form_valid(self, form):
-
         kindOptions = {"Humans": "H", "ZOMBIES":"Z"}
 
         sender = "hvzwattest@gmail.com"
-
         # sender = "mod@claremonthvz.org"
+
         if form.is_valid():
-            # send email using the self.cleand_data dictionary
+            # send email using information from the self.cleaned_data dictionary
             subject = form.cleaned_data['subject']
             body = form.cleaned_data['body']
             recipient_title = form.cleaned_data['recipient']
-
-
             schoolSelection = form.cleaned_data['school']
 
+            # filter players by team
             kind_recipients = []
             kind_label = "[" + recipient_title + "]"
             # Using a dictionary to have more robust way to select players
@@ -583,8 +579,10 @@ class Mailer(FormView):
                 # Default recipients list is all players
                 kind_recipients = [p.user.email for p in Player.current_players()]
            
+            # add team tag to subject line
             subject = kind_label + subject
            
+           # filter players by school, add school tag to subject line
             school_recipients = []
             for schools in schoolSelection:
                 school_label = "[" + schools + "]"
@@ -612,7 +610,8 @@ class Mailer(FormView):
                     attachment = self.request.FILES['attachment']
                     mailBag.attach(attachment.name, attachment.read(), attachment.content_type)
 
-            # recipients = emailList
+            # Send the email in batches of 100. Each batch is sent from a different email in 
+            # the list of sender accounts above (EMAIL_LIST)
             recipLen = len(emailList)
             x = 0
             y = 0

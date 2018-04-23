@@ -6,7 +6,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 
 urlpatterns = [
-    # Replace this view with your own
+	# Mailer form requires Django admin authentication
     path('mailer', staff_member_required(Mailer.as_view()), name="mailer"),
     path('success', success, name="mail_success")
     ]

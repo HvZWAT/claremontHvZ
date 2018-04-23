@@ -16,10 +16,6 @@ class MailerForm(forms.Form):
 	HUMANS = "Humans"
 	ZOMBIES = "Zombies"
 	
-	# Initial version is just to add schools to the same dropdown menu
-	#
-	# Plan is to allow either another dropdown menu (just for schools) in addition to
-	# this one or allow for multiple options to be checked off or something similar
 	KindCHOICES = [
 		(ALLPLAYERS, "All Players"),
 		(HUMANS, "Humans"),
@@ -36,28 +32,35 @@ class MailerForm(forms.Form):
 	# sender = "mod@claremonthvz.org"
 
 	#Email Field validates that the given value is a valid email address
+	
+	# Dropdown menu of team filters
 	recipient = forms.ChoiceField(
 		label=_("To:"),
 		required=True, 
 		choices = KindCHOICES
 		)
+
+	# checkboxes of school filtering options
 	school = forms.MultipleChoiceField(
 		choices = SchoolCHOICES,
 		widget = forms.CheckboxSelectMultiple(),
 		required = False)
 	
+	# subject line text field (aligned with body text)
 	subject = forms.CharField(
 		label=_("Subject:"),
 		required=True,
-		widget=forms.Textarea(attrs={'cols': '98', 'rows': 1})
+		widget=forms.Textarea(attrs={'cols': '97', 'rows': 1})
 		)
 
+	# body text field
 	body = forms.CharField(
 		label=_("Body:"),
 		required=False,
 		widget=forms.Textarea(attrs={'cols': '100', 'rows': 10})
 		)
 
+	# attachment button
 	attachment = forms.FileField(
 		label= ("Attachment:"),
 		required=False

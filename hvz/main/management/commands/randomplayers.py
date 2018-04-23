@@ -69,8 +69,8 @@ class Command(BaseCommand):
                 stdout=self.stdout,
                 stderr=self.stderr,
             )
-            self.schools = list(School.objects.all())
-            self.dorms = list(Building.dorms().all())
+            self.schools = list(models.School.objects.all())
+            self.dorms = list(models.Building.dorms().all())
 
         num_players = options.get('players') or NUM_PLAYERS
         num_ozs = options.get('ozs') or NUM_OZS
