@@ -61,7 +61,6 @@ class Mailer(FormView):
         return reverse("mail_success")
 
     def form_valid(self, form):
-
         kindOptions = {"Humans": "H", "ZOMBIES":"Z"}
 
         sender = "hvzwattest@gmail.com"
