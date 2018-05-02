@@ -1,0 +1,49 @@
+/* line 1, ../../sass/stats/ancestry.scss */
+path.link {
+  fill: none;
+  stroke: rgba(128, 0, 0, 0.26);
+  stroke-width: 1.5px;
+}
+
+/* line 7, ../../sass/stats/ancestry.scss */
+#ancestry_tab h1 {
+  float: left;
+}
+
+/* line 11, ../../sass/stats/ancestry.scss */
+.twitter-typeahead {
+  float: right;
+  margin: 1.5em;
+}
+
+/* line 16, ../../sass/stats/ancestry.scss */
+.tt-hint {
+  opacity: 0.5;
+}
+
+/* line 20, ../../sass/stats/ancestry.scss */
+.tt-is-under-cursor {
+  color: green;
+}
+
+/* line 24, ../../sass/stats/ancestry.scss */
+.tt-suggestion {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 225px;
+}
+
+/* line 30, ../../sass/stats/ancestry.scss */
+.tt-suggestion p {
+  margin: 0.25em;
+}
+
+/* line 34, ../../sass/stats/ancestry.scss */
+#ancestry_container {
+  margin-left: auto;
+  margin-right: auto;
+}
+/* line 38, ../../sass/stats/ancestry.scss */
+#ancestry_container text {
+  font-size: 14px;
+}
