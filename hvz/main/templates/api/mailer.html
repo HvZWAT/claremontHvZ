@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block stylein %}
+	<link rel="stylesheet" type="text/css" href="{% static 'styles/main/register.css' %}" />
+{% endblock stylein %}
+
+{% block content %}
+<div class="panel {% if form.errors %}panel-danger{% else %}panel-default{% endif %}">
+  <div class="panel-heading">
+    {% if form.errors %}
+      <h2 class="panel-title">Try that again</h2>
+      {{form.non_field_errors}}
+    {% else %}
+      <h2 class="panel-title">Send an Email</h2>
+    {% endif %}
+  </div>
+	<form
+     enctype="multipart/form-data"
+     class="register_form panel-body"
+     method="post"
+     action="{% url 'mailer' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value= "Send Message" class="btn" />
+  </form>
+</div>
+{% endblock %}
